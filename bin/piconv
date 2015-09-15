@@ -29,10 +29,10 @@ help()
          'debug|D',
          'scheme|S=s',
          'resolve|r=s',
-         'help',
+         'help|h',
          );
 
-$Opt{help} and help();
+$Opt{help} and help(undef, 1);
 $Opt{list} and list_encodings();
 my $locale = $ENV{LC_CTYPE} || $ENV{LC_ALL} || $ENV{LANG};
 defined $Opt{resolve} and resolve_encoding($Opt{resolve});
@@ -149,7 +149,7 @@ sub resolve_encoding {
 }
 
 sub help {
-    my $message = shift;
+    my($message, $no_error) = @_;
     $message and print STDERR "$name error: $message\n";
     print STDERR <<"EOT";
 $name [-f from_encoding] [-t to_encoding]
@@ -182,7 +182,7 @@ Those are handy when you can only see ASCII characters:
                       where HHHH is the hexadecimal Unicode code point
 
 EOT
-    exit;
+    exit($no_error ? 0 : 1);
 }
 
 __END__
